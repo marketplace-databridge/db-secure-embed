@@ -1,0 +1,5 @@
+node_modules/
+dist/
+build/
+test/harness/bundle.js
+.DS_Store

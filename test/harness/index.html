@@ -1,0 +1,35 @@
+<!doctype html><html><head><meta charset="utf-8"><title>harness</title>
+<style>body{margin:16px;font-family:'Source Sans Pro',Segoe UI,Arial;background:#f2f2f2}
+.grid{display:grid;grid-template-columns:repeat(3,380px);gap:16px}
+.tile{background:#fff;height:250px;box-shadow:0 1px 2px rgba(0,0,0,.15);display:flex;flex-direction:column}
+.tile h4{margin:0;padding:6px 8px;font-size:12px;color:#666;font-weight:600;border-bottom:1px solid #eee}
+.obj{flex:1;min-height:0;position:relative}</style></head>
+<body><div class="grid" id="g"></div>
+<script src="bundle.js"></script>
+<script>
+const EXT = 'http://127.0.0.1:8802/external.html';
+const allowlist = DBSE.normalizeAllowlist({ entries: [
+  { id:'intranet', label:'Customer intranet', origins:['http://127.0.0.1:8802'], allowInsecureHttp:true,
+    maxSandbox:['allow-scripts','allow-same-origin','allow-forms','allow-popups'], allowFeatures:['fullscreen'] } ]});
+const base = (o) => ({ props: Object.assign({ source:{ mode:'url', url: EXT } }, o) });
+const tiles = [
+  ['Embedded · toolbar', base({ toolbar:{ show:true, title:'Intranet', showHost:true } }), false],
+  ['Edit mode · policy badge', base({ security:{ sandboxPreset:'custom', custom:{'allow-scripts':true,'allow-modals':true}, features:{fullscreen:true,autoplay:true} } }), true],
+  ['Click to activate', base({ behaviour:{ interaction:'click' }, toolbar:{show:true, position:'bottom', title:'Click-to-activate'} }), false],
+  ['Link card mode', base({ display:{ mode:'link', linkTitle:'Customer intranet', linkDescription:'Opens in a new browser tab, as recommended by Qlik.' } }), false],
+  ['Blocked · viewer', base({ source:{ mode:'url', url:'https://evil.example.org/phish' } }), false],
+  ['Blocked · editor (template)', base({ source:{ mode:'template', template:'https://{host}/x', params:[{name:'host',value:'evil.io'}] } }), true],
+];
+window.ctrls = [];
+for (const [name, layout, edit] of tiles) {
+  const t = document.createElement('div'); t.className='tile';
+  t.innerHTML = '<h4></h4><div class="obj"></div>'; t.querySelector('h4').textContent = name;
+  document.getElementById('g').appendChild(t);
+  const c = new DBSE.FrameController(t.querySelector('.obj'));
+  c.update(DBSE.buildModel(layout, allowlist, { editMode: edit, selfOrigin: location.origin }));
+  ctrls.push(c);
+}
+// javascript: URL attempt must be blocked
+const jsModel = DBSE.buildModel(base({ source:{ mode:'url', url:'javascript:alert(document.cookie)' } }), allowlist, { editMode:true, selfOrigin: location.origin });
+window.jsDecision = jsModel.decision;
+</script></body></html>

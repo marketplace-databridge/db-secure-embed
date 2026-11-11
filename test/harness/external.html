@@ -1,0 +1,7 @@
+<!doctype html><html><head><meta charset="utf-8"></head><body style="margin:0;font-family:Segoe UI,Arial;background:linear-gradient(135deg,#e8f4ec,#d6ecf7);height:100vh;display:flex;align-items:center;justify-content:center">
+<div style="text-align:center"><h2 style="margin:0 0 6px;color:#1a5f3a">Approved intranet page</h2><p style="margin:0;color:#355">Served from a different origin, inside the sandbox.</p><p id="r" style="color:#900;font-size:12px"></p></div>
+<script>
+try { top.location.href = 'http://127.0.0.1:8801/HIJACKED.html'; document.getElementById('r').textContent='top navigation: NOT blocked'; }
+catch (e) { document.getElementById('r').textContent='top navigation attempt blocked ✓'; }
+try { parent.document.title; document.getElementById('r').textContent+=' | parent DOM readable ✗'; } catch(e) { document.getElementById('r').textContent+=' | parent DOM not reachable ✓'; }
+</script></body></html>

@@ -1,0 +1,56 @@
+{
+  "$comment": "Admin-managed. Only sites listed here can be embedded or linked by DataBridge Secure Embed. Edit, re-zip and re-import via QMC > Extensions. Keep in sync with the CSP frame-src header (npm run csp).",
+  "version": 1,
+  "defaults": {
+    "referrerPolicy": "no-referrer"
+  },
+  "entries": [
+    {
+      "id": "youtube",
+      "label": "YouTube (privacy-enhanced embeds)",
+      "origins": [
+        "https://www.youtube-nocookie.com",
+        "https://www.youtube.com"
+      ],
+      "pathPrefixes": [
+        "/embed/"
+      ],
+      "maxSandbox": [
+        "allow-scripts",
+        "allow-same-origin",
+        "allow-presentation",
+        "allow-popups",
+        "allow-popups-to-escape-sandbox"
+      ],
+      "allowFeatures": [
+        "fullscreen",
+        "autoplay",
+        "encrypted-media",
+        "picture-in-picture"
+      ],
+      "referrerPolicy": "strict-origin-when-cross-origin"
+    },
+    {
+      "id": "vimeo",
+      "label": "Vimeo player",
+      "origins": [
+        "https://player.vimeo.com"
+      ],
+      "pathPrefixes": [
+        "/video/"
+      ],
+      "maxSandbox": [
+        "allow-scripts",
+        "allow-same-origin",
+        "allow-presentation",
+        "allow-popups"
+      ],
+      "allowFeatures": [
+        "fullscreen",
+        "autoplay",
+        "picture-in-picture"
+      ],
+      "referrerPolicy": "strict-origin-when-cross-origin"
+    }
+  ]
+}
